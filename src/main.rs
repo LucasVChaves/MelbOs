@@ -2,6 +2,8 @@
 #![no_main]
 #![allow(non_snake_case)]
 
+mod vga_buffer;
+
 use core::panic::PanicInfo;
 
 #[panic_handler]
@@ -11,5 +13,7 @@ fn panic(_info: &PanicInfo) -> ! {
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
+    vga_buffer::test_print();
+
     loop{}
 }
