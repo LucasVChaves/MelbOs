@@ -1,5 +1,9 @@
 # MelbOs
 
+![MelbOs Logo](https://i.imgur.com/dqCboAr.png)  
+
+---  
+
 ## What is this  
 
 MelbOs is a bootloader / operating system made from scratch with Rust.  
