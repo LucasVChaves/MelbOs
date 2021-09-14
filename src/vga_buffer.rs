@@ -5,6 +5,7 @@ use core::fmt;
 use spin::Mutex;
 use lazy_static::lazy_static;
 
+//Colours for fore and background
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(u8)]
 pub enum Color {
@@ -26,6 +27,7 @@ pub enum Color {
     White = 15,
 }
 
+//The colorcode used by the vga buffer
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(transparent)]
 struct ColorCode(u8);
@@ -36,6 +38,7 @@ impl ColorCode{
     }
 }
 
+//Creates a screenchar with colorcode(both fore and backgrounds) and the ascii char
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(C)]
 struct ScreenChar{
@@ -57,6 +60,7 @@ pub struct Writer {
     buffer: &'static mut Buffer,
 }
 
+//The object responsible for printing to the screen
 impl Writer {
     pub fn write_byte(&mut self, byte: u8) {
         match byte {
@@ -117,7 +121,8 @@ impl fmt::Write for Writer {
     }
 }
 
-//Global Interface
+//Global Interface; A lazily initiated static lets us create the variable at runtime, 
+//making arbitrarily complex initialization code possible
 lazy_static! {
     pub static ref WRITER: Mutex<Writer> = Mutex::new(Writer {
         column_position: 0,
@@ -125,17 +130,3 @@ lazy_static! {
         buffer: unsafe { &mut *(0xb8000 as *mut Buffer) },
     });
 }
-
-/*
-pub fn test_print(){
-    let mut writer = Writer {
-        column_position: 0,
-        color_code: ColorCode::new(Color::Green, Color::Black),
-        buffer: unsafe { &mut *(0xb8000 as *mut Buffer) },
-    };
-
-    writer.write_byte(b'M');
-    writer.write_string("elb");
-    writer.write_string("OS");
-}
-*/
