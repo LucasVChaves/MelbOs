@@ -13,7 +13,9 @@ fn panic(_info: &PanicInfo) -> ! {
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
-    vga_buffer::test_print();
+    use core::fmt::Write;
+    vga_buffer::WRITER.lock().write_str("MelbOs").unwrap();
+    write!(vga_buffer::WRITER.lock(), "ver-{}year-{}", 010, 2021);
 
     loop{}
 }
