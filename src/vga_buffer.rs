@@ -154,7 +154,7 @@ fn test_println_simple() {
 #[test_case]
 fn test_println_array() {
     for n in 0..64 {
-        println!("test_println_arrat output nm {}", n);
+        println!("test_println_array output nm {}", n);
     }
 }
 

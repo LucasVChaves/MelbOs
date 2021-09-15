@@ -1,5 +1,5 @@
 [package]
-name = "MelbOs"
+name = "melb_os"
 version = "0.1.0"
 author = ["Y3T <y3tsec@protonmail.com>"]
 edition = "2018"

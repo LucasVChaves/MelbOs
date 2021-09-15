@@ -33,5 +33,6 @@ Run `man dd` if you have any problems.
 
 ## Testing  
 
-For now testing is not implemented.  
-I will add it in the future.  
+Simply run `cargo test`.  
+
+The tests are a bit buggy right now due to not fully implemented panic handlers, it won't work correctly!  
