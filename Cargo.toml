@@ -1,11 +1,15 @@
 [package]
 name = "melb_os"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Y3T <y3tsec@protonmail.com>"]
 edition = "2018"
 
 [[test]]
 name = "should_panic"
+harness = false
+
+[[test]]
+name = "stack_overflow"
 harness = false
 
 [dependencies]

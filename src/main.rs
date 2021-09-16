@@ -10,11 +10,13 @@ use melb_os::println;
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
-    println!("MelbOS | {}", "ver0.1.0");
-    
+    println!("MelbOS | {}", "ver:0.1.1");
+
+    melb_os::init();
+
     #[cfg(test)]
     test_main();
-    
+
     loop {}
 }
 

@@ -23,8 +23,9 @@ The image can be foun in `target/x86_64-melb-os/debug`.
 
 The image can be run with [QEMU](https://www.qemu.org): `cargo run`.  
 
-You and also write the image to and USB stick and boot on hardware.
-I recommend using [Rufus](https://rufus.ie/en_US/). But you can use Linux's native tool for it:
+You can also write the image to and USB stick and boot on hardware.
+I recommend using [Rufus](https://rufus.ie/en_US/).  
+Also, it's possible to use Linux's native tool for it:
 
 `dd if=target/x86_64-melb-os/debug/bootimage-MelbOs.bin of=/dev/FlashDriveName && sync`  
 
@@ -34,5 +35,4 @@ Run `man dd` if you have any problems.
 ## Testing  
 
 Simply run `cargo test`.  
-
-The tests are a bit buggy right now due to not fully implemented panic handlers, it won't work correctly!  
+Or run `cargo test --test test_name` for a specific file.  
