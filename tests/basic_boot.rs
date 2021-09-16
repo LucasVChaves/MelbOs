@@ -4,22 +4,22 @@
 #![test_runner(melb_os::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
-use melb_os::println;
 use core::panic::PanicInfo;
+use melb_os::println;
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
     test_main();
-    
-    loop{}
+
+    loop {}
 }
 
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
-    test_panic_handler(info);
+    melb_os::test_panic_handler(info)
 }
 
 #[test_case]
 fn test_println() {
-    println!("test_println output");
+    println!("Testing println! inside basic_boot.rs");
 }

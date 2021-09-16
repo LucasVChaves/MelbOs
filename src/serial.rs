@@ -3,8 +3,9 @@ use spin::Mutex;
 use uart_16550::SerialPort;
 
 lazy_static! {
+    /// Standart serial bus communication.
     pub static ref SERIAL1: Mutex<SerialPort> = {
-        let mut serial_port = unsafe {SerialPort::new(0x3f8)}; //0x3f8 is the default port for SERIAL1 communications
+        let mut serial_port = unsafe { SerialPort::new(0x3F8) }; //0x3F8 is the default port for first serial interfacek
         serial_port.init();
         Mutex::new(serial_port)
     };
@@ -13,22 +14,23 @@ lazy_static! {
 #[doc(hidden)]
 pub fn _print(args: ::core::fmt::Arguments) {
     use core::fmt::Write;
-    SERIAL1
-        .lock()
-        .write_fmt(args)
+    SERIAL1.lock().write_fmt(args)
         .expect("Printing to serial failed");
 }
 
-//Print to the host via serial UART comunicaton
+/// Prints to the host through the serial interface.
 #[macro_export]
 macro_rules! serial_print {
-    ($($arg:tt)*) => {$crate::serial::_print(format_args!($($arg)*));};
+    ($($arg:tt)*) => {
+        $crate::serial::_print(format_args!($($arg)*));
+    };
 }
 
-//Same as serial_print, but appends a new line
+/// Prints to the host through the serial interface, appending a newline.
 #[macro_export]
 macro_rules! serial_println {
     () => ($crate::serial_print!("\n"));
     ($fmt:expr) => ($crate::serial_print!(concat!($fmt, "\n")));
-    ($fmt:expr, $($arg:tt)*) => ($crate::serial_print!(concat!($fmt, "\n"), $($arg)*));
+    ($fmt:expr, $($arg:tt)*) => ($crate::serial_print!(
+        concat!($fmt, "\n"), $($arg)*));
 }

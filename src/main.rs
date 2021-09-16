@@ -2,18 +2,15 @@
 #![no_main]
 #![allow(non_snake_case)]
 #![feature(custom_test_frameworks)]
-#![test_runner(crate::test_runner)]
+#![test_runner(melb_os::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
-mod serial;
-mod vga_buffer;
-
 use core::panic::PanicInfo;
-use crate::println;
+use melb_os::println;
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
-    println!("MelbOs");
+    println!("MelbOS | {}", "ver0.1.0");
     
     #[cfg(test)]
     test_main();
@@ -21,7 +18,7 @@ pub extern "C" fn _start() -> ! {
     loop {}
 }
 
-//Outside test mode
+/// This function is called on panic.
 #[cfg(not(test))]
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
@@ -29,21 +26,8 @@ fn panic(info: &PanicInfo) -> ! {
     loop {}
 }
 
-//Panic handler for test mode
 #[cfg(test)]
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
-    serial_println!("[failed]\n");
-    exit_qemu(QemuExitCode::Failed);
-    loop {}
-}
-
-#[test_case]
-fn trivial_assertion() {
-    assert_eq!(1, 1);
-}
-
-#[test_case]
-fn trivial_assertion_ineq() {
-    assert_ne!(1 ,2);
+    melb_os::test_panic_handler(info)
 }

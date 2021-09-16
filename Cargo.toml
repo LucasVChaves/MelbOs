@@ -1,8 +1,12 @@
 [package]
 name = "melb_os"
 version = "0.1.0"
-author = ["Y3T <y3tsec@protonmail.com>"]
+authors = ["Y3T <y3tsec@protonmail.com>"]
 edition = "2018"
+
+[[test]]
+name = "should_panic"
+harness = false
 
 [dependencies]
 bootloader = "0.9.8"
@@ -15,8 +19,8 @@ uart_16550 = "0.2.0"
 version = "1.0"
 features = ["spin_no_std"]
 
+#0xf4 = typical x86's IO bus / 0x04 = 4 bytes
 [package.metadata.bootimage]
 test-args = ["-device", "isa-debug-exit,iobase=0xf4,iosize=0x04", "-serial", "stdio", "-display", "none"]
-test-success-exit-code = 33 # (0x10 << 1) \ 1
-#A timeout is necessary due to the possibility of falling in endless loops in real hardware
-test-timeout = 300          # (in seconds)
+test-success-exit-code = 33  # (0x10 << 1) | 1
+#test-timout = 300 # in seconds / if the boot falls into a infinity loop the timout kills it
