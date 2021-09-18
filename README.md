@@ -36,3 +36,8 @@ Run `man dd` if you have any problems.
 
 Simply run `cargo test`.  
 Or run `cargo test --test test_name` for a specific file.  
+
+## License  
+
+Following the request of the original author this project follows the Apache 2 license.  
+Read the `LICENSE` file for more information.
