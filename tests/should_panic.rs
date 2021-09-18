@@ -12,11 +12,10 @@ use melb_os::serial_print;
 pub extern "C" fn _start () -> ! {
     should_fail();
     serial_println!("[test did not panic]");
-    exit_qemu(QemuExitCode::Failed)
+    exit_qemu(QemuExitCode::Failed);
     loop {}
 }
 
-#[test_case]
 fn should_fail(){
     serial_print!("should_panic::should_fail...\t");
     assert_eq!(0,1);

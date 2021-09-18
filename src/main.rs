@@ -17,7 +17,7 @@ pub extern "C" fn _start() -> ! {
     #[cfg(test)]
     test_main();
 
-    loop {}
+    melb_os::hlt_loop();
 }
 
 /// This function is called on panic.
@@ -25,7 +25,7 @@ pub extern "C" fn _start() -> ! {
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     println!("{}", info);
-    loop {}
+    melb_os::hlt_loop();
 }
 
 #[cfg(test)]
@@ -33,3 +33,6 @@ fn panic(info: &PanicInfo) -> ! {
 fn panic(info: &PanicInfo) -> ! {
     melb_os::test_panic_handler(info)
 }
+
+//TODO
+//Keyboard Input
