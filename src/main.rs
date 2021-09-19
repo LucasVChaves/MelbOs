@@ -5,18 +5,34 @@
 #![test_runner(melb_os::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
+use bootloader::{entry_point, BootInfo};
 use core::panic::PanicInfo;
 use melb_os::println;
 
-#[no_mangle]
-pub extern "C" fn _start() -> ! {
-    println!("MelbOS | {}", "ver:0.1.1");
+entry_point!(kernel_main);
 
+#[no_mangle]
+fn kernel_main(boot_info: &'static BootInfo) -> ! {
+    use melb_os::memory;
+    use x86_64::{structures::paging::Page, VirtAddr};
+
+    println!("MelbOS | {}", "ver:0.1.1");
     melb_os::init();
+
+    let phys_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
+    let mut mapper = unsafe {memory::init(phys_mem_offset)};
+    let mut frame_allocator = memory::EmptyFrameAllocator;
+
+    let page = Page::containing_address(VirtAddr::new(0));
+    memory::create_example_mapping(page, &mut mapper, &mut frame_allocator);
+
+    let page_ptr: *mut u64 = page.start_address().as_mut_ptr();
+    unsafe {page_ptr.offset(400).write_volatile(0x_f021_f077_f065_f04e)};
 
     #[cfg(test)]
     test_main();
 
+    println!("It did not crash!");
     melb_os::hlt_loop();
 }
 
@@ -35,4 +51,5 @@ fn panic(info: &PanicInfo) -> ! {
 }
 
 //TODO
-//Keyboard Input
+//Fix keyboard support
+//Memory Management stuff
