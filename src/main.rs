@@ -5,18 +5,22 @@
 #![test_runner(melb_os::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
+extern crate alloc;
+
 use bootloader::{entry_point, BootInfo};
 use core::panic::PanicInfo;
 use melb_os::println;
+use alloc::{boxed::Box, vec, vec::Vec, rc::Rc};
 
 entry_point!(kernel_main);
 
 #[no_mangle]
 fn kernel_main(boot_info: &'static BootInfo) -> ! {
+    use melb_os::allocator;
     use melb_os::memory::{self, BootInfoFrameAllocator};
     use x86_64::{structures::paging::Page, VirtAddr};
 
-    println!("MelbOS | {}", "ver:0.1.1");
+    println!("MelbOS | ver:0.1.2");
     melb_os::init();
 
     let phys_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
@@ -27,7 +31,24 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
     memory::create_example_mapping(page, &mut mapper, &mut frame_allocator);
 
     let page_ptr: *mut u64 = page.start_address().as_mut_ptr();
-    unsafe {page_ptr.offset(400).write_volatile(0x_f021_f077_f065_f04e)};
+    //unsafe {page_ptr.offset(400).write_volatile(0x_f021_f077_f065_f04e)};
+
+    allocator::init_heap(&mut mapper, &mut frame_allocator).expect("heap initialization failed");
+
+    let heap_value = Box::new(41);
+    println!("heap_value at {:p}", heap_value);
+
+    let mut vec = Vec::new();
+    for i in 0..500 {
+        vec.push(i);
+    }
+    println!("vec at {:p}", vec.as_slice());
+
+    let reference_counted = Rc::new(vec![1,2,3]);
+    let cloned_reference = reference_counted.clone();
+    println!("current reference count is {}", Rc::strong_count(&cloned_reference));
+    core::mem::drop(reference_counted);
+    println!("reference count is {} now", Rc::strong_count(&cloned_reference));
 
     #[cfg(test)]
     test_main();
@@ -49,3 +70,7 @@ fn panic(info: &PanicInfo) -> ! {
 fn panic(info: &PanicInfo) -> ! {
     melb_os::test_panic_handler(info)
 }
+
+//TODO
+//Finish the linked list module
+//Fixed-size block allocators
