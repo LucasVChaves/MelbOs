@@ -20,7 +20,8 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
     use melb_os::memory::{self, BootInfoFrameAllocator};
     use x86_64::{structures::paging::Page, VirtAddr};
 
-    println!("MelbOS | ver:0.1.2");
+    const VERSION: &'static str = env!("CARGO_PKG_VERSION");
+    println!("MelbOS | ver:{:?}", VERSION);
     melb_os::init();
 
     let phys_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
