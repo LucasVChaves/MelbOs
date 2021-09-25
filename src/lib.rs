@@ -13,10 +13,12 @@ pub mod interrupts;
 pub mod memory;
 pub mod serial;
 pub mod vga_buffer;
+pub mod task;
 
 extern crate alloc;
 
-use core::panic::PanicInfo;
+use core::{panic::PanicInfo, future::Future, pin::Pin};
+use alloc::boxed::Box;
 
 #[cfg(test)]
 use bootloader::{entry_point, BootInfo};
@@ -81,6 +83,10 @@ pub fn exit_qemu(exit_code: QemuExitCode) {
         let mut port = Port::new(0xf4); //Typical x86 IO bus
         port.write(exit_code as u32);
     }
+}
+
+pub struct Task {
+    future: Pin<Box<dyn Future<Output = ()>>>,
 }
 
 #[alloc_error_handler]
