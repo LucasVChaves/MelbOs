@@ -9,7 +9,7 @@ extern crate alloc;
 
 use bootloader::{entry_point, BootInfo};
 use core::panic::PanicInfo;
-use melb_os::{println, print, task::{Task, executor::Executor, simple_executor::SimpleExecutor, keyboard}};
+use melb_os::{println, task::{Task, executor::Executor, simple_executor::SimpleExecutor, keyboard}};
 
 entry_point!(kernel_main);
 
@@ -32,21 +32,9 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
     #[cfg(test)]
     test_main();
     
-    println!("It did not crash!");
-    
     let mut executor = Executor::new();
-    executor.spawn(Task::new(example_task()));
     executor.spawn(Task::new(keyboard::print_keypresses()));
     executor.run();
-}
-
-async fn async_num() -> u32 {
-    42
-}
-
-async fn example_task() {
-    let number = async_num().await;
-    println!("Async Number: {}", number);
 }
 
 /// This function is called on panic.

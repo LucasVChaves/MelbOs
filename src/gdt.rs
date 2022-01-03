@@ -6,7 +6,6 @@ use lazy_static::lazy_static;
 
 pub const DOUBLE_FAULT_IST_INDEX: u16 = 0;
 
-//Temporary due to lack of memory management
 lazy_static! {
     static ref TSS: TaskStateSegment = {
         let mut tss = TaskStateSegment::new();
@@ -46,3 +45,8 @@ pub fn init(){
         load_tss(GDT.1.tss_selector);
     }
 }
+
+/*
+Global Descriptor Table is used for memory segmentation.
+Even though memory paging is implemented and functional, GDT is needed in the bootloader.
+*/
