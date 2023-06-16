@@ -9,6 +9,7 @@
 MelbOs is a bootloader / operating system made from scratch with Rust.  
 It's pretty basic as I don't want to build a new linux, this is just for learning purposes.  
 The project is based on [this blog](https://os.phil-opp.com) and was created by [Philipp Oppermann](https://github.com/phil-opp).  
+The project is frozen at the moment. But I intend to finish it.
 
 ## Building  
 
